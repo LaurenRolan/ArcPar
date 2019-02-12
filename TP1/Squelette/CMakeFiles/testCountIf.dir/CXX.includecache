@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP1/Squelette/src/Metrics.cpp
+Metrics.hpp
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP1/Squelette/src/Metrics.hpp
+
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP1/Squelette/src/testCountIf.cpp
+CountIf.hpp
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP1/Squelette/src/CountIf.hpp
+Metrics.hpp
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP1/Squelette/src/Metrics.hpp
+omp.h
+-
+algorithm
+-
+array
+-
+list
+-
+iostream
+-
+cstdlib
+-
+
+src/include/CountIf.hpp
+omp.h
+-
+algorithm
+-
+vector
+-
+iostream
+-
+
+src/include/Metrics.hpp
+
