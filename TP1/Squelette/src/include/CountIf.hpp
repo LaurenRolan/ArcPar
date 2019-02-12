@@ -227,20 +227,25 @@ namespace paralgos {
 	typename std::iterator_traits< InputIterator >::difference_type acc = 0;
 
     //std::vector<InputIterator> threadData(threads);
+
+  // omp for schedule(static, 1)
+
+  #pragma omp parallel reduction(+:acc)
+  {
+
     InputIterator it = first;
 
+    int tid = omp_get_thread_num();
+
+    for (int i = 0; i < tid && it != last; i ++, it ++);
+
     while(it != last) {
-      
-      #pragma omp parallel for schedule(auto) reduction(+:acc)
-      for(int i = 0; i < threads; ++i) {
-        if (pred(*(it + i))) ++acc;
-      }
+      if (pred(*it)) ++acc;
 
-
-      it += threads;
+      for (int i = 0; i < threads && it != last; i ++, it ++);
     }
 
-
+} // omp parallel
 
 
 	// C'est terminé.
