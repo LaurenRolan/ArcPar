@@ -89,7 +89,7 @@ namespace paralgos {
 	    const UnaryPredicate& pred,
 	    const int& threads) {
 
-	return strategyA(first, last, pred, threads);
+	return strategyB(first, last, pred, threads);
 
       } // apply
 
@@ -191,10 +191,38 @@ namespace paralgos {
 	// Compteur des éléments satisfaisant le prédicat.
 	typename std::iterator_traits< InputIterator >::difference_type acc = 0;
 
-	/***************
-	 * A compléter *
-	 ***************/
+	#pragma omp parallel
+  {
+    #pragma omp single
+    {
+    //Creation des taches
 
+    auto it = first;
+    auto start = first;
+    int i;
+
+    while (it != last) {
+      
+      i = 0;
+      while (it != last && i < taille) {
+        it ++;
+        i ++;
+      }
+
+#pragma omp task firstprivate(start, it) shared(acc, pred)
+        {
+#pragma omp atomic        
+          acc += std::count_if(start, it, pred);
+        } // omp task
+
+      start = it;
+
+  } // while
+
+  } // omp single
+
+  } // omp parallel
+  
 	// C'est terminé.
 	return acc;
 
