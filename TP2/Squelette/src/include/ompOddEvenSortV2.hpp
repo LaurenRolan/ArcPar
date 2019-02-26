@@ -7,6 +7,7 @@
 #include <vector>
 #include <utility>
 #include <functional>
+#include <iostream> //Debug
 
 namespace sorting {
 
@@ -169,20 +170,32 @@ namespace sorting {
         // droite (s'il existe) puis fusionnent.
         if (tid % 2 == modulo) {
           if (! estDernier) {
-            // A compléter.
+            if(droite.begin() != droite.end()) {
+              fusion.end() = merging::merge_n(droite.begin(), droite.end(),
+                       bloc.begin(), bloc.end(), 
+                       fusion.begin(), 
+                       bloc.size() + droite.size());
+              std::cout << "After right fusion\n";
+            } //if
           } // if
         }
         // tandis que les threads passifs vont chercher ceux de leur voisin de
         // gauche (s'il existe) puis fusionnent.
         else {
           if (! estPremier) {
-            // A compléter.
+            if(gauche.begin() != gauche.end()) {
+              fusion.end() = merging::merge_n(gauche.begin(), gauche.end(),
+                       bloc.begin(), bloc.end(), 
+                       fusion.begin(), 
+                       bloc.size() + gauche.size());
+              std::cout << "After left fusion\n";
+            } //if
           } // if
         } // if
 
         // In fine, tous les threads recopient dans leur bloc local.
 
-        // A compléter.
+        std::copy(fusion.begin(), fusion.end(), bloc.begin());
 
       } // for
 

@@ -44,23 +44,27 @@ namespace sorting {
       // effectué pour cette nouvelle itération de la boucle.
       echange = false;
 
-      // Balayage des éléments de rang pair ou impair selon la période.
-      for (RandomAccessIterator it = first + shift; it < last - 1; it += 2) {
+      #pragma omp parallel
+      {
+        // Balayage des éléments de rang pair ou impair selon la période.
+        #pragma omp for schedule(static)
+        for (RandomAccessIterator it = first + shift; it < last - 1; it += 2) {
 
-        // Obtention de l'élément courant et de son successeur. Le mot-clé auto,
-        // introduit par la norme 2011, permet de ne pas mentionner le type des
-        // éléments.
-        auto& courant = *it;
-        auto& suivant = *(it + 1);
+          // Obtention de l'élément courant et de son successeur. Le mot-clé auto,
+          // introduit par la norme 2011, permet de ne pas mentionner le type des
+          // éléments.
+          auto& courant = *it;
+          auto& suivant = *(it + 1);
 
-        // Les éléments ne sont pas correctement ordonnés : il faut procéder à
-        // un échange.
-        if (! comp(courant, suivant)) {
-          std::swap(courant, suivant);
-          echange = true;
-        } // if
+          // Les éléments ne sont pas correctement ordonnés : il faut procéder à
+          // un échange.
+          if (! comp(courant, suivant)) {
+            std::swap(courant, suivant);
+            echange = true;
+          } // if
 
-      } // for
+        } // for
+      } //omp parallel
 
       // Mise à jour du décalage pour la période suivante.
       shift = 1 - shift;

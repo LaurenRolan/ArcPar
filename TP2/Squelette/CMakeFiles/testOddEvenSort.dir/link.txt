@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -Wall -Wextra -march=native -fopenmp -O3   CMakeFiles/testOddEvenSort.dir/src/testOddEvenSort.cpp.o CMakeFiles/testOddEvenSort.dir/src/Metrics.cpp.o  -o bin/Release/testOddEvenSort -rdynamic 

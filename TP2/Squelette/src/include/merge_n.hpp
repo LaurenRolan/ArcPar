@@ -37,7 +37,12 @@ namespace merging {
           Size n,
           Compare comp) {
 
-    // A compléter.
+    
+    while ( true ) {
+      if ( first1 == last1 ) return std::copy_n(first2, n, result);
+      if ( first2 == last2 ) return std::copy_n(first1, n, result);
+      *result ++ = comp(*first1, *first2)? *first1++ : *first2++;
+    }
 
     // Retourner l'itérateur balayant le conteneur cible.
     return result;
