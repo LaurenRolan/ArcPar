@@ -89,7 +89,6 @@ main() {
   // Affichage des résultats de la version parallèle avec, en plus, le calcul
   // des facteurs d'accélération et d'efficacité. Une accélération sur-linéaire
   // indique une meilleure utilisation des caches L2 (partagé) et L1 (privé).
-  std::cout << *tableau.begin() << " " << *(tableau.end() - 1) << std::endl;
   std::cout << "--[ pipelinedBubbleSort: begin ]--" << std::endl;
   std::cout << "\tThread(s):\t" << chunks << std::endl;
   std::cout << "\tDurée:\t\t" << par << " sec." << std::endl;

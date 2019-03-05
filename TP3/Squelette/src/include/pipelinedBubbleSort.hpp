@@ -26,22 +26,83 @@ namespace sorting {
                            const Compare& comp,
                            const size_t& chunks) {
 
-    typename std::iterator_traits<RandomAccessIterator>::difference_type dist = std::distance(first, last);
+    typedef std::iterator_traits< RandomAccessIterator > Traits;
+    typedef typename Traits::value_type value_type;
+    typedef std::vector<value_type> Item;
     
-    int iterations = dist / chunks;
-    int lastSize = dist % chunks;
-    if(lastSize > 0) iterations++;
+    class EntryStage : public tbb::filter {
+    private:
+      RandomAccessIterator it_;
+      const RandomAccessIterator& last_;
+      const size_t chunkSize_;
+    public:
+      EntryStage(const RandomAccessIterator & first,
+                 const RandomAccessIterator & last,
+                 const size_t& chunkSize) 
+                : tbb::filter(tbb::filter::serial_out_of_order),
+          it_(first), 
+          last_(last),
+          chunkSize_(chunkSize) { }
 
-    auto it = first;
-    for(int i =  0; i < iterations; i++) {
-      if(i = iterations - 1) {
-        bubbleSort(it, it + lastSize);
-        it += lastSize;
-      } else {
-        bubbleSort(it, it + chunks);
-        it += chunks;
+      void * operator()(void * item) override {
+        if (it_ == last_) {
+          return NULL;
+        }
+
+        auto start = it_;
+        for(int i = 0; i < chunkSize_ && it_ != last_; i++, it_ ++);
+        
+        return new Item(start, it_);
       }
-    }
+    };
+
+    class MiddleStage : public tbb::filter {
+    private:
+      const Compare& comp_;
+      Item * item_;
+    public:
+      MiddleStage(const Compare& comp) : tbb::filter(tbb::filter::parallel),
+      comp_(comp) { }
+      void * operator()(void * item) override {
+        item_ = static_cast<Item*>(item);
+        bubbleSort(item_->begin(), item_->end(), comp_);
+        return item_;
+      }
+    };
+
+    class OutputStage : public tbb::filter {
+    private:
+      RandomAccessIterator first_;
+      RandomAccessIterator it_;
+      const Compare& comp_; 
+      Item * item_;
+    public:
+      OutputStage(const RandomAccessIterator & first, const Compare& comp) 
+                  : tbb::filter(tbb::filter::serial_out_of_order),
+                    first_(first),
+                    comp_(comp),
+                    it_(first) { }
+      void * operator()(void * item) override {
+         item_ = static_cast<Item*>(item);
+         auto stop = std::copy(item_->begin(), item_->end(), it_);
+         delete item_;
+         std::inplace_merge(first_, it_, stop, comp_);
+         it_ = stop;
+         return NULL;
+      }
+    };
+    
+    EntryStage stage1(first, last, 16);
+    MiddleStage stage2(comp);
+    OutputStage stage3(first, comp);
+
+    tbb::pipeline pipe;
+
+    pipe.add_filter(stage1);
+    pipe.add_filter(stage2);
+    pipe.add_filter(stage3);
+
+    pipe.run(chunks);
 
   } // pipelinedBubbleSort
 
@@ -72,7 +133,6 @@ namespace sorting {
 			chunks);
 
   } // pipelinedBubbleSort
-
 } // sorting
 
 #endif
