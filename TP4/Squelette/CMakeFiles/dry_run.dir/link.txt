@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c11   CMakeFiles/dry_run.dir/src/bench.c.o CMakeFiles/dry_run.dir/src/matvec.c.o  -o bin/dry_run -rdynamic 

@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=c11   CMakeFiles/bench.dir/src/bench.c.o CMakeFiles/bench.dir/src/matvec.c.o  -o bin/bench -rdynamic 

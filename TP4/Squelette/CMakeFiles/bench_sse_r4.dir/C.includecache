@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP4/Squelette/src/bench.c
+stdlib.h
+-
+stdio.h
+-
+matvec_r4.h
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP4/Squelette/src/matvec_r4.h
+matvec_sse_r4.h
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP4/Squelette/src/matvec_sse_r4.h
+matvec.h
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP4/Squelette/src/matvec.h
+
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP4/Squelette/src/matvec_sse_r4.c
+matvec_sse_r4.h
+/home/eleves/promo20/info/lrolan/Bureau/arcpar/TP4/Squelette/src/matvec_sse_r4.h
+
+src/include/matvec.h
+
+src/include/matvec_r4.h
+
+src/include/matvec_sse_r4.h
+x86intrin.h
+-
+
